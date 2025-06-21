@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MunDev.Models.ProyectoUsuario>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RolEnProyecto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaAsignacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Proyecto.NombreProyecto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Usuario.NombreUsuario)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RolEnProyecto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaAsignacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Proyecto.NombreProyecto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Usuario.NombreUsuario)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ProyectoUsuarioId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ProyectoUsuarioId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ProyectoUsuarioId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

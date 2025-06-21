@@ -1,0 +1,49 @@
+﻿@model MunDev.Models.Repositorio
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Repositorio</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="RepositorioId" />
+            <div class="form-group">
+                <label asp-for="ProyectoId" class="control-label"></label>
+                <select asp-for="ProyectoId" class="form-control" asp-items="ViewBag.ProyectoId"></select>
+                <span asp-validation-for="ProyectoId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NombreRepositorio" class="control-label"></label>
+                <input asp-for="NombreRepositorio" class="form-control" />
+                <span asp-validation-for="NombreRepositorio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RepositorioUrl" class="control-label"></label>
+                <input asp-for="RepositorioUrl" class="form-control" />
+                <span asp-validation-for="RepositorioUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaCreacion" class="control-label"></label>
+                <input asp-for="FechaCreacion" class="form-control" />
+                <span asp-validation-for="FechaCreacion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MunDev.Models.Repositorio>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreRepositorio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RepositorioUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaCreacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Proyecto)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreRepositorio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RepositorioUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaCreacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Proyecto.ProyectoId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.RepositorioId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.RepositorioId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.RepositorioId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
