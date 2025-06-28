@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MunDev.Data;
 using MunDev.Models;
-using Octokit; // Asegúrate de que este using esté presente para Octokit
-using Microsoft.Extensions.Configuration; // Necesario si usas IConfiguration para tokens
+using Octokit; 
+using Microsoft.Extensions.Configuration; 
 using Microsoft.AspNetCore.Authorization;
 
 namespace MunDev.Controllers
@@ -17,17 +17,13 @@ namespace MunDev.Controllers
     public class RepositoriosController : Controller
     {
         private readonly MunDevContext _context;
-        // Opcional: Propiedad para almacenar el token de GitHub si se usa autenticación.
-        // private readonly string? _githubToken;
+       
 
         // Constructor: Inyecta el contexto de la base de datos y la configuración (si usas token).
         public RepositoriosController(MunDevContext context /*, IConfiguration configuration */)
         {
             _context = context;
-            // Si necesitas un Personal Access Token (PAT) de GitHub para mayor límite de solicitudes
-            // o para acceder a repositorios privados, puedes cargarlo desde appsettings.json.
-            // Asegúrate de inyectar IConfiguration en el constructor:
-            // _githubToken = configuration["GitHub:PersonalAccessToken"];
+
         }
 
         // GET: Repositorios (Muestra una lista de repositorios)
@@ -58,10 +54,8 @@ namespace MunDev.Controllers
             return View(repositorio);
         }
 
-        // GET: Repositorios/Create (Muestra el formulario para crear un nuevo repositorio)
         public IActionResult Create()
         {
-            // CAMBIO AQUÍ: Carga los proyectos para el SelectList, mostrando el NombreProyecto.
             ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "NombreProyecto");
             return View();
         }
@@ -71,9 +65,7 @@ namespace MunDev.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RepositorioId,ProyectoId,NombreRepositorio,RepositorioUrl,FechaCreacion")] Repositorio repositorio)
         {
-            // === INICIO DE LA LÓGICA DE INTEGRACIÓN Y VALIDACIÓN CON GITHUB ===
-
-            // 1. Validaciones iniciales de la URL (obligatorio, formato URL, es de GitHub).
+            
             if (string.IsNullOrWhiteSpace(repositorio.RepositorioUrl))
             {
                 ModelState.AddModelError("RepositorioUrl", "La URL del repositorio es obligatoria.");
@@ -90,7 +82,6 @@ namespace MunDev.Controllers
             // Si hay errores de validación inicial, no continuamos con la llamada a la API de GitHub.
             if (!ModelState.IsValid)
             {
-                // CAMBIO AQUÍ: Recargar SelectList con NombreProyecto si la validación falla
                 ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "NombreProyecto", repositorio.ProyectoId);
                 return View(repositorio);
             }
@@ -139,7 +130,6 @@ namespace MunDev.Controllers
                 ModelState.AddModelError("RepositorioUrl", "Ocurrió un error inesperado al procesar la URL del repositorio.");
             }
 
-            // === FIN DE LA LÓGICA DE INTEGRACIÓN Y VALIDACIÓN CON GITHUB ===
 
             if (ModelState.IsValid)
             {
@@ -149,7 +139,6 @@ namespace MunDev.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Si hay errores (después de cualquier validación), recarga los SelectList y devuelve la vista
             ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "NombreProyecto", repositorio.ProyectoId);
             return View(repositorio);
         }
@@ -167,7 +156,6 @@ namespace MunDev.Controllers
             {
                 return NotFound();
             }
-            // CAMBIO AQUÍ: Carga los proyectos para el SelectList, mostrando el NombreProyecto.
             ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "NombreProyecto", repositorio.ProyectoId);
             return View(repositorio);
         }
@@ -182,7 +170,6 @@ namespace MunDev.Controllers
                 return NotFound();
             }
 
-            // === INICIO DE LA LÓGICA DE INTEGRACIÓN Y VALIDACIÓN CON GITHUB (Similar al Create) ===
 
             if (string.IsNullOrWhiteSpace(repositorio.RepositorioUrl))
             {
@@ -199,7 +186,6 @@ namespace MunDev.Controllers
 
             if (!ModelState.IsValid)
             {
-                // CAMBIO AQUÍ: Recargar SelectList con NombreProyecto si la validación falla
                 ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "NombreProyecto", repositorio.ProyectoId);
                 return View(repositorio);
             }
@@ -247,7 +233,6 @@ namespace MunDev.Controllers
                 ModelState.AddModelError("RepositorioUrl", "Ocurrió un error inesperado al procesar la URL del repositorio.");
             }
 
-            // === FIN DE LA LÓGICA DE INTEGRACIÓN CON GITHUB ===
 
             if (ModelState.IsValid)
             {
@@ -279,7 +264,6 @@ namespace MunDev.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            // Si hay errores, recarga los SelectList y devuelve la vista.
             ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "NombreProyecto", repositorio.ProyectoId);
             return View(repositorio);
         }
