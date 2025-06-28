@@ -15,6 +15,9 @@ public partial class Usuario
 
     public bool? Activo { get; set; }
 
+    public virtual Perfil? Perfil { get; set; }
+
+    public virtual ICollection<Proyecto> Proyectos { get; set; } = new List<Proyecto>();
     public virtual ICollection<ActividadUsuario> ActividadUsuarios { get; set; } = new List<ActividadUsuario>();
 
     public virtual ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
@@ -25,7 +28,6 @@ public partial class Usuario
 
     public virtual ICollection<ProyectoUsuario> ProyectoUsuarios { get; set; } = new List<ProyectoUsuario>();
 
-    public virtual ICollection<Proyecto> Proyectos { get; set; } = new List<Proyecto>();
 
     public virtual ICollection<Tarea> Tareas { get; set; } = new List<Tarea>();
 }

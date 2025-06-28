@@ -1,47 +1,106 @@
 ﻿@model IEnumerable<MunDev.Models.Equipo>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Gestión de Equipos";
 }
 
-<h1>Index</h1>
+<h1 class="display-4 mb-4 text-primary">
+    <i class="bi bi-people-fill"></i> @ViewData["Title"]
+</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
+<p class="mb-4">
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Crear Nuevo Equipo
+    </a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreEquipo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreadoPorUsuario)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreEquipo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreadoPorUsuario.UsuarioId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EquipoId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EquipoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EquipoId">Delete</a>
-            </td>
-        </tr>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 }
-    </tbody>
-</table>
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["InfoMessage"] != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @TempData["InfoMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Listado de Equipos</h5>
+    </div>
+    <div class="card-body">
+        @if (!Model.Any())
+        {
+            <p class="text-muted">No tienes equipos visibles. ¡Crea un nuevo equipo o únete a uno para verlo aquí!</p>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.NombreEquipo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Descripcion)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CreadoPorUsuario)
+                            </th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NombreEquipo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Descripcion)
+                                </td>
+                                <td>
+                                    @* CORRECTED: Add null check for CreadoPorUsuario *@
+                                    @(item.CreadoPorUsuario?.NombreUsuario ?? "N/A")
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group" aria-label="Acciones de Equipo">
+                                        <a asp-action="Edit" asp-route-id="@item.EquipoId" class="btn btn-sm btn-warning" title="Editar">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.EquipoId" class="btn btn-sm btn-info" title="Ver Detalles">
+                                            <i class="bi bi-info-circle"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.EquipoId" class="btn btn-sm btn-danger" title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                        <a asp-action="TeamChat" asp-controller="Chat" asp-route-teamId="@item.EquipoId" class="btn btn-sm btn-primary" title="Ir al Chat del Equipo">
+                                            <i class="bi bi-chat-dots"></i>
+                                        </a>
+                                        <a asp-action="SendInvitation" asp-controller="Invitations" asp-route-teamId="@item.EquipoId" class="btn btn-sm btn-success" title="Invitar Miembro">
+                                            <i class="bi bi-person-plus"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

@@ -1,46 +1,70 @@
 ﻿@model MunDev.Models.ProyectoUsuario
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Asignar Proyecto a Usuario";
 }
 
-<h1>Create</h1>
+<h1 class="display-4 mb-4 text-primary">
+    <i class="bi bi-person-plus-fill"></i> @ViewData["Title"]
+</h1>
 
-<h4>ProyectoUsuario</h4>
+<h4 class="mb-3">Nueva Asignación</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Proyecto" class="control-label"></label>
-                <select asp-for="Proyecto" class="form-control" asp-items="ViewBag.ProyectoId"></select>
-                <span asp-validation-for="Proyecto" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Usuario" class="control-label"></label>
-                <select asp-for="Usuario" class="form-control" asp-items="ViewBag.UsuarioId"></select>
-                <span asp-validation-for="Usuario" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RolEnProyecto" class="control-label"></label>
-                <select asp-for="RolEnProyecto" class="form-control" asp-items="ViewBag.Roles">
-                    <option value="">-- Seleccione un Rol --</option>
-                </select>
-                <span asp-validation-for="RolEnProyecto" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm p-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="ProyectoId" class="form-label"></label> @* Usar ProyectoId para el SelectList *!*@
+                    <select asp-for="ProyectoId" class="form-control" asp-items="ViewBag.ProyectoId">
+                        <option value="">-- Seleccione un Proyecto --</option>
+                    </select>
+                    <span asp-validation-for="ProyectoId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="UsuarioId" class="form-label"></label> @* Usar UsuarioId para el SelectList *!*@
+                    <select asp-for="UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId">
+                        <option value="">-- Seleccione un Usuario --</option>
+                    </select>
+                    <span asp-validation-for="UsuarioId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="RolEnProyecto" class="form-label"></label>
+                    <select asp-for="RolEnProyecto" class="form-control" asp-items="ViewBag.Roles">
+                        <option value="">-- Seleccione un Rol --</option>
+                    </select>
+                    <span asp-validation-for="RolEnProyecto" class="text-danger"></span>
+                </div>
+
+                @* FechaAsignacion se puede establecer en el controlador a DateTime.Now *!*@
+                @* Si quieres un input para la fecha:
+                <div class="form-group mb-3">
+                    <label asp-for="FechaAsignacion" class="form-label"></label>
+                    <input asp-for="FechaAsignacion" class="form-control" type="date" />
+                    <span asp-validation-for="FechaAsignacion" class="text-danger"></span>
+                </div>
+                *!*@
+
+                <div class="form-group mt-4">
+                    <button type="submit" value="Create" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Guardar Asignación
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary ms-2">
+                        <i class="bi bi-arrow-left"></i> Volver a la Lista
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

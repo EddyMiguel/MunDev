@@ -7,7 +7,12 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MunDev.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <!-- IMPORTANTE: Añade el CDN de Bootstrap Icons para que el icono de campana (bi bi-bell-fill) se muestre -->
+    @RenderSection("Styles", required: false)
 </head>
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -28,33 +33,86 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Proyectos" asp-action="Index">Proyectos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Equipos" asp-action="Index">Equipos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Rols" asp-action="Index">Roles</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ProyectoUsuarios" asp-action="Index">Usuarios en proyecto</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Tareas" asp-action="Index">Tareas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Repositorios" asp-action="Index">Repositorios</a>
-                        </li>
+                        @* Aquí irían otros enlaces como los de Repositorios, Equipos, Invitar, etc. *!*@
+                        @* Si el usuario está autenticado, puedes mostrar enlaces adicionales *!*@
+                        @* CORRECTED: Explicitly check for User.Identity null before accessing IsAuthenticated *!*@
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Equipos" asp-action="Index">Equipos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Invitations" asp-action="SendInvitation">Invitar</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Notifications" asp-action="Index">Notificaciones </a> @* Your DB notifications controller *!*@
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Perfiles" asp-action="MyProfile">
+                                    <i class="bi bi-person-bounding-box"></i> Mi Perfil
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <form asp-controller="Account" asp-action="Logout" method="post">
+                                        <button type="submit" class="nav-link btn btn-link text-dark">Salir de @User.Identity.Name</button>
+                                        @Html.AntiForgeryToken() @* This is crucial for [ValidateAntiForgeryToken] *@
+                                    </form>
+                                }
+                                else
+                                {
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                }
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+    <div class="container mt-3 mb-4 p-3 bg-white shadow-sm rounded-3">
+        <ul class="nav nav-pills nav-fill flex-column flex-md-row">
+            <li class="nav-item mb-2 mb-md-0">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Proyectos" asp-action="Index">
+                    <i class="bi bi-folder-fill me-2"></i> Proyectos
+                </a>
+            </li>
+            <li class="nav-item mb-2 mb-md-0">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Equipos" asp-action="Index">
+                    <i class="bi bi-people-fill me-2"></i> Equipos
+                </a>
+            </li>
+
+            <li class="nav-item mb-2 mb-md-0">
+                <a class="nav-link text-dark" asp-area="" asp-controller="ProyectoUsuarios" asp-action="Index">
+                    <i class="bi bi-person-workspace me-2"></i> Usuarios en Proyecto
+                </a>
+            </li>
+            <li class="nav-item mb-2 mb-md-0">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Tareas" asp-action="Index">
+                    <i class="bi bi-check2-square me-2"></i> Tareas
+                </a>
+            </li>
+            <li class="nav-item mb-2 mb-md-0">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Repositorios" asp-action="Index">
+                    <i class="bi bi-github me-2"></i> Repositorios
+                </a>
+            </li>
+            <li class="nav-item mb-2 mb-md-0">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Notifications" asp-action="Index">
+                    <i class="bi bi-bell-fill me-2"></i> Notificaciones
+                </a>
+            </li>
+        </ul>
+    </div>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
     </div>
 
     <footer class="border-top footer text-muted">
@@ -65,6 +123,75 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @* === SCRIPT FOR WEBSECKET NOTIFICATIONS === *@
+    @* Only if the user is authenticated, we establish the WebSocket connection *@
+    @* CORRECTED: Explicitly check for User.Identity null before accessing IsAuthenticated *!*@
+    @if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        <script>
+            function showToastNotification(message) {
+                const toastContainer = document.querySelector('.toast-container');
+                if (!toastContainer) {
+                    console.warn("Contenedor de Toast no encontrado. Agregue: <div class='toast-container position-fixed bottom-0 end-0 p-3'></div> al final de su <body>.");
+                    alert("Notificación: " + message); // Fallback to alert if no toast container
+                    return;
+                }
+
+                const toastHtml = `
+                    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto"><i class="bi bi-bell-fill"></i> Notificación MunDev</strong>
+                            <small>Ahora</small>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            ${message}
+                        </div>
+                    </div>
+                `;
+                const toastElement = document.createElement('div');
+                toastElement.innerHTML = toastHtml;
+                toastContainer.appendChild(toastElement.firstElementChild);
+
+                const toast = new bootstrap.Toast(toastElement.firstElementChild);
+                toast.show();
+            }
+
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            // Make sure this URL is correct for your WebSocketNotificationsController
+            const notificationsSocketUrl = `${protocol}//${window.location.host}/WebSocketNotifications/Connect`;
+
+            let notificationsSocket;
+
+            function connectNotificationsWebSocket() {
+                notificationsSocket = new WebSocket(notificationsSocketUrl);
+
+                notificationsSocket.onopen = function (event) {
+                    console.log("Conexión WebSocket de notificaciones abierta.");
+                };
+
+                notificationsSocket.onmessage = function (event) {
+                    console.log("Notificación recibida:", event.data);
+                    showToastNotification(event.data);
+                };
+
+                notificationsSocket.onclose = function (event) {
+                    console.log("Conexión WebSocket de notificaciones cerrada. Intentando reconectar en 5 segundos...", event);
+                    setTimeout(connectNotificationsWebSocket, 5000);
+                };
+
+                notificationsSocket.onerror = function (error) {
+                    console.error("Error en WebSocket de notificaciones:", error);
+                };
+            }
+
+            // Start the WebSocket connection for notifications when the document is ready
+            $(document).ready(function () {
+                connectNotificationsWebSocket();
+            });
+        </script>
+    }
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

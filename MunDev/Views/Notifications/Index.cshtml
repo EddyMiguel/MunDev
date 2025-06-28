@@ -1,0 +1,105 @@
+﻿@model IEnumerable<MunDev.Models.Notificacion>
+
+@{
+    ViewData["Title"] = "Notificaciones";
+}
+
+<h1 class="display-4 mb-4 text-primary">
+    <i class="bi bi-bell-fill"></i> @ViewData["Title"]
+</h1>
+
+@* ENLACE DE CREACIÓN ELIMINADO:
+<p class="mb-4">
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Crear Nueva Notificación
+    </a>
+</p>
+*@
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Listado de Notificaciones</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead class="bg-light">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Mensaje)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaCreacion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Leida)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.TipoNotificacion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Usuario)
+                        </th>
+                        <th class="text-center">Acciones</th> @* Solo para ver detalles ahora *!*@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Mensaje)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaCreacion)
+                            </td>
+                            <td>
+                                @{
+                                    // CORRECCIÓN AQUÍ: Usar GetValueOrDefault(false) para manejar bool?
+                                    string leidaIconClass = item.Leida.GetValueOrDefault(false) ? "bi bi-check-circle-fill text-success" : "bi bi-x-circle-fill text-danger";
+                                    string leidaText = item.Leida.GetValueOrDefault(false) ? "Sí" : "No";
+                                }
+                                <i class="@leidaIconClass"></i> @leidaText
+                            </td>
+                            <td>
+                                @{
+                                    string tipoBadgeClass = "";
+                                    switch (item.TipoNotificacion)
+                                    {
+                                        case "Información":
+                                            tipoBadgeClass = "bg-info";
+                                            break;
+                                        case "Advertencia":
+                                            tipoBadgeClass = "bg-warning text-dark";
+                                            break;
+                                        case "Error":
+                                            tipoBadgeClass = "bg-danger";
+                                            break;
+                                        case "Éxito":
+                                            tipoBadgeClass = "bg-success";
+                                            break;
+                                        default:
+                                            tipoBadgeClass = "bg-secondary";
+                                            break;
+                                    }
+                                }
+                                <span class="badge @tipoBadgeClass">@Html.DisplayFor(modelItem => item.TipoNotificacion)</span>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Usuario.NombreUsuario)
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group" aria-label="Acciones de Notificación">
+                                    @* ENLACES DE EDICIÓN Y ELIMINACIÓN ELIMINADOS: *!*@
+                                    <a asp-action="Details" asp-route-id="@item.NotificacionId" class="btn btn-sm btn-info" title="Ver Detalles">
+                                        <i class="bi bi-info-circle"></i> Ver Detalles
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,71 +1,132 @@
 ﻿@model IEnumerable<MunDev.Models.Tarea>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Gestión de Tareas";
 }
 
-<h1>Index</h1>
+<h1 class="display-4 mb-4 text-primary">
+    <i class="bi bi-check2-square"></i> @ViewData["Title"]
+</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
+<p class="mb-4">
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Crear Nueva Tarea
+    </a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Titulo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaVencimiento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EstadoTarea)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Prioridad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AsignadoAusuario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Proyecto)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaVencimiento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstadoTarea)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Prioridad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AsignadoAusuario.UsuarioId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Proyecto.ProyectoId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TareaId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TareaId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TareaId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Listado de Tareas</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead class="bg-light">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Titulo)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaVencimiento)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.EstadoTarea)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Prioridad)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AsignadoAusuario) @* Mostrará el nombre del usuario *!*@
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Proyecto) @* Mostrará el nombre del proyecto *!*@
+                        </th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Titulo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaVencimiento)
+                            </td>
+                            <td>
+                                @{
+                                    string estadoBadgeClass = "";
+                                    switch (item.EstadoTarea)
+                                    {
+                                        case "Completada":
+                                            estadoBadgeClass = "bg-success";
+                                            break;
+                                        case "En Progreso":
+                                            estadoBadgeClass = "bg-primary"; // O bg-info, bg-warning
+                                            break;
+                                        case "Bloqueada":
+                                            estadoBadgeClass = "bg-danger";
+                                            break;
+                                        case "Pendiente":
+                                        default:
+                                            estadoBadgeClass = "bg-secondary";
+                                            break;
+                                    }
+                                }
+                                <span class="badge @estadoBadgeClass">@Html.DisplayFor(modelItem => item.EstadoTarea)</span>
+                            </td>
+                            <td>
+                                @{
+                                    string prioridadBadgeClass = "";
+                                    switch (item.Prioridad)
+                                    {
+                                        case "Crítica":
+                                            prioridadBadgeClass = "bg-danger";
+                                            break;
+                                        case "Alta":
+                                            prioridadBadgeClass = "bg-warning text-dark"; // Amarillo para alta, texto oscuro
+                                            break;
+                                        case "Media":
+                                            prioridadBadgeClass = "bg-info";
+                                            break;
+                                        case "Baja":
+                                        default:
+                                            prioridadBadgeClass = "bg-secondary";
+                                            break;
+                                    }
+                                }
+                                <span class="badge @prioridadBadgeClass">@Html.DisplayFor(modelItem => item.Prioridad)</span>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AsignadoAusuario.NombreUsuario) @* Asumo NombreUsuario *!*@
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Proyecto.NombreProyecto) @* Asumo NombreProyecto *!*@
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group" aria-label="Acciones de Tarea">
+                                    <a asp-action="Edit" asp-route-id="@item.TareaId" class="btn btn-sm btn-warning" title="Editar">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a asp-action="Details" asp-route-id="@item.TareaId" class="btn btn-sm btn-info" title="Ver Detalles">
+                                        <i class="bi bi-info-circle"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.TareaId" class="btn btn-sm btn-danger" title="Eliminar">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

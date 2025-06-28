@@ -36,12 +36,59 @@ public partial class MunDevContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
+    public DbSet<EquipoUsuario> EquipoUsuarios { get; set; }
+    public DbSet<Invitation> Invitations { get; set; }
+    public DbSet<Perfil> Perfiles { get; set; } = null!;
+
+
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Server=DESKTOP-9G14HAJ;Database=MunDev;Integrated Security=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+        modelBuilder.Entity<Usuario>()
+            .HasOne(u => u.Perfil) // Un Usuario tiene un Perfil
+            .WithOne(p => p.Usuario) // Un Perfil pertenece a un Usuario
+            .HasForeignKey<Perfil>(p => p.UsuarioId) // La FK en Perfil es UsuarioId
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Invitation>()
+        .HasOne(i => i.InvitedByUser)
+        .WithMany()
+        .HasForeignKey(i => i.InvitedByUserId)
+        .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Invitation>()
+            .HasOne(i => i.AcceptedByUser)
+            .WithMany()
+            .HasForeignKey(i => i.AcceptedByUserId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Invitation>()
+            .HasOne(i => i.Equipo)
+            .WithMany()
+            .HasForeignKey(i => i.EquipoId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<EquipoUsuario>()
+        .HasOne(eu => eu.Equipo)
+        .WithMany(e => e.EquipoUsuarios)
+        .HasForeignKey(eu => eu.EquipoId)
+         .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<EquipoUsuario>()
+            .HasOne(eu => eu.Usuario)
+            .WithMany()
+            .HasForeignKey(eu => eu.UsuarioId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<ActividadUsuario>(entity =>
+
         {
             entity.HasKey(e => e.ActividadUsuarioId).HasName("PK__Activida__9FDCB5056E041739");
 

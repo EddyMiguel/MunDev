@@ -1,0 +1,77 @@
+﻿@model IEnumerable<MunDev.Models.Invitation>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.InvitedEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InvitationToken)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateSent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpirationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAccepted)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InvitedByUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AcceptedByUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Equipo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.InvitedEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InvitationToken)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateSent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpirationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsAccepted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InvitedByUser.UsuarioId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AcceptedByUser.UsuarioId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Equipo.EquipoId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.InvitationId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.InvitationId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.InvitationId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,56 +1,83 @@
 ﻿@model MunDev.Models.Proyecto
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear Nuevo Proyecto";
 }
 
-<h1>Create</h1>
+<h1 class="display-4 mb-4 text-primary">
+    <i class="bi bi-plus-circle"></i> @ViewData["Title"]
+</h1>
 
-<h4>Proyecto</h4>
+<h4 class="mb-3">Información del Proyecto</h4>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NombreProyecto" class="control-label"></label>
-                <input asp-for="NombreProyecto" class="form-control" />
-                <span asp-validation-for="NombreProyecto" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaInicio" class="control-label"></label>
-                <input asp-for="FechaInicio" class="form-control" />
-                <span asp-validation-for="FechaInicio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaFinEstimada" class="control-label"></label>
-                <input asp-for="FechaFinEstimada" class="form-control" />
-                <span asp-validation-for="FechaFinEstimada" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreadoPorUsuarioId" class="control-label"></label>
-                <select asp-for="CreadoPorUsuarioId" class ="form-control" asp-items="ViewBag.CreadoPorUsuarioId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="EquipoId" class="control-label"></label>
-                <select asp-for="EquipoId" class ="form-control" asp-items="ViewBag.EquipoId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="col-md-6">
+        <div class="card shadow-sm p-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="NombreProyecto" class="form-label"></label>
+                    <input asp-for="NombreProyecto" class="form-control" placeholder="Ej: Plataforma de Gestión de Proyectos" />
+                    <span asp-validation-for="NombreProyecto" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Descripcion" class="form-label"></label>
+                    <textarea asp-for="Descripcion" class="form-control" rows="3" placeholder="Describe el alcance y los objetivos del proyecto..."></textarea>
+                    <span asp-validation-for="Descripcion" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="FechaInicio" class="form-label"></label>
+                    <input asp-for="FechaInicio" class="form-control" type="date" />
+                    <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="FechaFinEstimada" class="form-label"></label>
+                    <input asp-for="FechaFinEstimada" class="form-control" type="date" />
+                    <span asp-validation-for="FechaFinEstimada" class="text-danger"></span>
+                </div>
+
+                @* FechaCreacion se establecerá en el controlador, no se necesita input aquí *!*@
+                @* CreadoPorUsuarioId se asigna automáticamente en el controlador, no se necesita input *!*@
+
+                <div class="form-group mb-3">
+                    <label asp-for="EstadoProyecto" class="form-label"></label>
+                    <select asp-for="EstadoProyecto" class="form-control">
+                        <option value="">-- Seleccione un estado --</option>
+                        <option value="Activo">Activo</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Culminado">Culminado</option>
+                    </select>
+                    <span asp-validation-for="EstadoProyecto" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="EquipoId" class="form-label"></label>
+                    <select asp-for="EquipoId" class="form-control" asp-items="ViewBag.EquipoId">
+                        <option value="">-- Seleccionar Equipo (Opcional, para proyecto personal) --</option>
+                    </select>
+                    <span asp-validation-for="EquipoId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Guardar Proyecto
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary ms-2">
+                        <i class="bi bi-arrow-left"></i> Volver a la Lista
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

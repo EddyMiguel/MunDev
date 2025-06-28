@@ -16,4 +16,5 @@ public partial class Equipo
     public virtual Usuario? CreadoPorUsuario { get; set; }
 
     public virtual ICollection<Proyecto> Proyectos { get; set; } = new List<Proyecto>();
+    public virtual ICollection<EquipoUsuario> EquipoUsuarios { get; set; } = new List<EquipoUsuario>();
 }

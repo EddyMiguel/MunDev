@@ -1,60 +1,106 @@
 ﻿@model MunDev.Models.Tarea
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles de la Tarea";
 }
 
-<h1>Details</h1>
+<h1 class="display-4 mb-4 text-primary">
+    <i class="bi bi-info-circle"></i> @ViewData["Title"]
+</h1>
 
-<div>
-    <h4>Tarea</h4>
-    <hr />
+<h4 class="mb-3">Información Completa</h4>
+<hr />
+
+<div class="card shadow-sm p-4">
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Titulo)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Titulo)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Descripcion)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Descripcion)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.FechaVencimiento)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.FechaVencimiento)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.EstadoTarea)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EstadoTarea)
+        <dd class="col-sm-9">
+            @{
+                string estadoBadgeClass = "";
+                switch (Model.EstadoTarea)
+                {
+                    case "Completada":
+                        estadoBadgeClass = "bg-success";
+                        break;
+                    case "En Progreso":
+                        estadoBadgeClass = "bg-primary";
+                        break;
+                    case "Bloqueada":
+                        estadoBadgeClass = "bg-danger";
+                        break;
+                    case "Pendiente":
+                    default:
+                        estadoBadgeClass = "bg-secondary";
+                        break;
+                }
+            }
+            <span class="badge @estadoBadgeClass">@Html.DisplayFor(model => model.EstadoTarea)</span>
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Prioridad)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Prioridad)
+        <dd class="col-sm-9">
+            @{
+                string prioridadBadgeClass = "";
+                switch (Model.Prioridad)
+                {
+                    case "Crítica":
+                        prioridadBadgeClass = "bg-danger";
+                        break;
+                    case "Alta":
+                        prioridadBadgeClass = "bg-warning text-dark";
+                        break;
+                    case "Media":
+                        prioridadBadgeClass = "bg-info";
+                        break;
+                    case "Baja":
+                    default:
+                        prioridadBadgeClass = "bg-secondary";
+                        break;
+                }
+            }
+            <span class="badge @prioridadBadgeClass">@Html.DisplayFor(model => model.Prioridad)</span>
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.AsignadoAusuario)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AsignadoAusuario.UsuarioId)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.AsignadoAusuario.NombreUsuario) @* Asumo NombreUsuario *!*@
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Proyecto)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Proyecto.ProyectoId)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Proyecto.NombreProyecto) @* Asumo NombreProyecto *!*@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.TareaId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model?.TareaId" class="btn btn-warning">
+        <i class="bi bi-pencil-square"></i> Editar
+    </a>
+    <a asp-action="Index" class="btn btn-secondary ms-2">
+        <i class="bi bi-arrow-left"></i> Volver a la Lista
+    </a>
 </div>
