@@ -1,0 +1,80 @@
+﻿@model MunDev.Models.Notificacion
+
+@{
+    ViewData["Title"] = "Detalles de la Notificación";
+}
+
+<h1 class="display-4 mb-4 text-primary">
+    <i class="bi bi-info-circle"></i> @ViewData["Title"]
+</h1>
+
+<h4 class="mb-3">Información Completa</h4>
+<hr />
+
+<div class="card shadow-sm p-4">
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Mensaje)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Mensaje)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.FechaCreacion)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.FechaCreacion)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Leida)
+        </dt>
+        <dd class="col-sm-9">
+            @{
+                // CORRECCIÓN AQUÍ: Usar GetValueOrDefault(false) para manejar bool?
+                string leidaIconClass = Model.Leida.GetValueOrDefault(false) ? "bi bi-check-circle-fill text-success" : "bi bi-x-circle-fill text-danger";
+                string leidaText = Model.Leida.GetValueOrDefault(false) ? "Sí" : "No";
+            }
+            <i class="@leidaIconClass"></i> @leidaText
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.TipoNotificacion)
+        </dt>
+        <dd class="col-sm-9">
+            @{
+                string tipoBadgeClass = "";
+                switch (Model.TipoNotificacion)
+                {
+                    case "Información":
+                        tipoBadgeClass = "bg-info";
+                        break;
+                    case "Advertencia":
+                        tipoBadgeClass = "bg-warning text-dark";
+                        break;
+                    case "Error":
+                        tipoBadgeClass = "bg-danger";
+                        break;
+                    case "Éxito":
+                        tipoBadgeClass = "bg-success";
+                        break;
+                    default:
+                        tipoBadgeClass = "bg-secondary";
+                        break;
+                }
+            }
+            <span class="badge @tipoBadgeClass">@Html.DisplayFor(model => model.TipoNotificacion)</span>
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Usuario)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Usuario.NombreUsuario)
+        </dd>
+    </dl>
+</div>
+
+<div class="mt-4">
+    @* ENLACE DE EDICIÓN ELIMINADO: *@
+    <a asp-action="Index" class="btn btn-secondary ms-2">
+        <i class="bi bi-arrow-left"></i> Volver a la Lista
+    </a>
+</div>

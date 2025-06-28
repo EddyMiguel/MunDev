@@ -1,0 +1,75 @@
+﻿@model MunDev.Models.Invitation
+
+@{
+    ViewData["Title"] = "Aceptar Invitación";
+}
+
+<h1 class="mb-4">@ViewData["Title"]</h1>
+
+<h4 class="mb-3">Únete a MunDev</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        @* Muestra mensajes de error/éxito pasados con TempData *!*@
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <form asp-action="AcceptInvitation" method="post">
+            @* Muestra errores de validación a nivel de modelo *!*@
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            @* Campo oculto para enviar el token de invitación al POST *!*@
+            <input type="hidden" name="invitationToken" value="@ViewBag.InvitationToken" />
+
+            <div class="form-group mb-3">
+                <label for="invitedEmailDisplay" class="form-label">Correo Electrónico Invitado:</label>
+                @* Muestra el correo invitado (solo lectura) *!*@
+                <input id="invitedEmailDisplay" class="form-control" value="@ViewBag.InvitedEmail" readonly />
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="teamNameDisplay" class="form-label">Serás Miembro del Equipo:</label>
+                @* Muestra el nombre del equipo al que se unirá (solo lectura) *!*@
+                <input id="teamNameDisplay" class="form-control" value="@ViewBag.EquipoNombre" readonly />
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="password" class="form-label">Elige una Contraseña:</label>
+                @* Input para que el usuario elija su contraseña. **ADVERTENCIA: REQUIERE HASHEO DE CONTRASEÑA EN BACKEND** *!*@
+                <input id="password" name="password" type="password" class="form-control" required />
+                @* Si usas un ViewModel para AcceptInvitation, podrías añadir un asp-validation-for aquí *!*@
+            </div>
+
+            @* Opcional: Campo para confirmar contraseña (requeriría más validación en el backend) *!*@
+            @*
+            <div class="form-group mb-3">
+                <label for="confirmPassword" class="form-label">Confirma Contraseña:</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" required />
+            </div>
+            *!*@
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-person-plus"></i> Aceptar Invitación y Unirse
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

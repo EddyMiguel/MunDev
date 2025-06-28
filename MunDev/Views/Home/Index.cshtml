@@ -1,8 +1,95 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@* Views/Home/Index.cshtml
+   Esta vista es la página de inicio "Welcome" de tu aplicación MunDev.
+   Se ha estilizado para ser más atractiva visualmente utilizando clases de Bootstrap 5. *@
+
+@{
+    ViewData["Title"] = "Bienvenido a MunDev";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid text-center py-5 bg-light rounded-3 shadow-sm my-5">
+    @* Un "hero section" simple con fondo claro y esquinas redondeadas *!*@
+    <h1 class="display-3 fw-bold text-primary mb-4 animate__animated animate__fadeInDown">
+        <i class="bi bi-code-slash"></i> Bienvenido a MunDev
+    </h1>
+    <p class="lead text-muted mb-4 animate__animated animate__fadeInUp">
+        Tu plataforma integral para la gestión de proyectos y desarrollo de software.
+        Organiza tus equipos, proyectos, tareas y repositorios en un solo lugar.
+    </p>
+    <div class="d-grid gap-2 col-md-8 mx-auto animate__animated animate__fadeInUp animate__delay-1s">
+        @* Botones de acción principales, centrados y con espacio *!*@
+        <a asp-controller="Proyectos" asp-action="Index" class="btn btn-primary btn-lg custom-btn-shine">
+            <i class="bi bi-kanban"></i> Ver Mis Proyectos
+        </a>
+        <a asp-controller="Equipos" asp-action="Index" class="btn btn-outline-secondary btn-lg">
+            <i class="bi bi-people"></i> Explorar Equipos
+        </a>
+
+    </div>
 </div>
+
+<div class="container text-center mt-5">
+    <h2 class="mb-4 text-secondary">¿Por qué usar MunDev?</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col animate__animated animate__zoomIn">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="bi bi-check-circle-fill text-success display-4 mb-3"></i>
+                    <h5 class="card-title">Gestión Eficiente</h5>
+                    <p class="card-text text-muted">Centraliza la administración de tus proyectos y tareas.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col animate__animated animate__zoomIn animate__delay-1s">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="bi bi-share-fill text-info display-4 mb-3"></i>
+                    <h5 class="card-title">Colaboración Sencilla</h5>
+                    <p class="card-text text-muted">Facilita la comunicación y el trabajo en equipo.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col animate__animated animate__zoomIn animate__delay-2s">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="bi bi-git text-dark display-4 mb-3"></i>
+                    <h5 class="card-title">Integración con Repositorios</h5>
+                    <p class="card-text text-muted">Vincula tus repositorios de código directamente.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        .display-3 {
+            font-size: 3.5rem; /* Ajuste para un título grande */
+        }
+        .custom-btn-shine {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .custom-btn-shine::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 0;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(45deg);
+            transition: all 0.7s cubic-bezier(0.165, 0.84, 0.44, 1);
+            z-index: -1;
+        }
+        .custom-btn-shine:hover::before {
+            width: 150%;
+        }
+        /* Para asegurar que los iconos de Bootstrap se vean */
+        i.bi {
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+    </style>
+}

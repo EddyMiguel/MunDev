@@ -1,53 +1,76 @@
 ﻿@model IEnumerable<MunDev.Models.ProyectoUsuario>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Asignaciones de Proyectos y Usuarios";
 }
 
-<h1>Index</h1>
+<h1 class="display-4 mb-4 text-primary">
+    <i class="bi bi-person-lines-fill"></i> @ViewData["Title"]
+</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
+<p class="mb-4">
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Asignar Proyecto a Usuario
+    </a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.RolEnProyecto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaAsignacion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Proyecto.NombreProyecto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Usuario.NombreUsuario)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RolEnProyecto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaAsignacion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Proyecto.NombreProyecto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Usuario.NombreUsuario)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProyectoUsuarioId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProyectoUsuarioId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProyectoUsuarioId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Listado de Asignaciones</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead class="bg-light">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RolEnProyecto)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaAsignacion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Proyecto) @* Ahora muestra NombreProyecto *!*@
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Usuario) @* Ahora muestra NombreUsuario *!*@
+                        </th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RolEnProyecto)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaAsignacion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Proyecto.NombreProyecto)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Usuario.NombreUsuario) @* O .Email, si usas el email como nombre *!*@
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group" aria-label="Acciones de Asignación">
+                                    <a asp-action="Edit" asp-route-id="@item.ProyectoUsuarioId" class="btn btn-sm btn-warning" title="Editar">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a asp-action="Details" asp-route-id="@item.ProyectoUsuarioId" class="btn btn-sm btn-info" title="Ver Detalles">
+                                        <i class="bi bi-info-circle"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.ProyectoUsuarioId" class="btn btn-sm btn-danger" title="Eliminar">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

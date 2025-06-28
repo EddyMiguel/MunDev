@@ -1,0 +1,66 @@
+﻿@model MunDev.Models.Invitation
+
+@{
+    ViewData["Title"] = "Enviar Invitación";
+}
+
+<h1 class="mb-4">@ViewData["Title"]</h1>
+
+<h4 class="mb-3">Invitar Nuevo Miembro a un Equipo</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        @* Muestra mensajes de éxito/error pasados con TempData *!*@
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <form asp-action="SendInvitation" method="post">
+            @* Muestra errores de validación a nivel de modelo que no están ligados a un campo específico *!*@
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="EquipoId" class="form-label"></label>
+                @* SelectList para elegir el equipo. asp-for vincula al modelo, asp-items usa la lista de ViewBag. *!*@
+                <select asp-for="EquipoId" class="form-control" asp-items="ViewBag.EquipoId">
+                    <option value="">-- Seleccione un Equipo --</option> @* Opción por defecto *!*@
+                </select>
+                <span asp-validation-for="EquipoId" class="text-danger"></span> @* Muestra errores de validación para EquipoId *!*@
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="InvitedEmail" class="form-label"></label>
+                @* Input para el correo electrónico del invitado. type="email" para validación HTML5. *!*@
+                <input asp-for="InvitedEmail" class="form-control" type="email" placeholder="ejemplo@dominio.com" />
+                <span asp-validation-for="InvitedEmail" class="text-danger"></span> @* Muestra errores de validación para InvitedEmail *!*@
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-send"></i> Enviar Invitación @* Icono de Bootstrap Icons (requiere CDN) *!*@
+                </button>
+                <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-2">
+                    <i class="bi bi-arrow-left"></i> Volver al Inicio
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    @* Si usas Bootstrap Icons, asegúrate de tener el CDN en tu _Layout.cshtml: *!*@
+    @* <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> *!*@
+}

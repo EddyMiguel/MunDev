@@ -1,42 +1,53 @@
 ﻿@model MunDev.Models.Repositorio
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles del Repositorio";
 }
 
-<h1>Details</h1>
+<h1 class="display-4 mb-4 text-primary">
+    <i class="bi bi-info-circle"></i> @ViewData["Title"]
+</h1>
 
-<div>
-    <h4>Repositorio</h4>
-    <hr />
+<h4 class="mb-3">Información Completa</h4>
+<hr />
+
+<div class="card shadow-sm p-4">
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.NombreRepositorio)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.NombreRepositorio)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.RepositorioUrl)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RepositorioUrl)
+        <dd class="col-sm-9">
+            <a href="@Model.RepositorioUrl" target="_blank" rel="noopener noreferrer">
+                @Html.DisplayFor(model => model.RepositorioUrl)
+                <i class="bi bi-box-arrow-up-right ms-1"></i> @* Icono de enlace externo *!*@
+            </a>
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.FechaCreacion)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.FechaCreacion)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Proyecto)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Proyecto.ProyectoId)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Proyecto.NombreProyecto) @* Muestra el nombre del proyecto *!*@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.RepositorioId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model?.RepositorioId" class="btn btn-warning">
+        <i class="bi bi-pencil-square"></i> Editar
+    </a>
+    <a asp-action="Index" class="btn btn-secondary ms-2">
+        <i class="bi bi-arrow-left"></i> Volver a la Lista
+    </a>
 </div>

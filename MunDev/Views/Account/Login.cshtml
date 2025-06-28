@@ -1,28 +1,82 @@
-﻿@{
-	ViewData["Ttile"] = "Login";
-	var returnUrl = ViewData["ReturnUrl"] as string;
+﻿@* Views/Account/Login.cshtml
+   Esta vista maneja el inicio de sesión.
+   Se ha estilizado para ser más atractiva utilizando clases de Bootstrap 5. *@
+
+@{
+    // Corrección del typo: "Ttile" a "Title"
+    ViewData["Title"] = "Iniciar Sesión";
+    var returnUrl = ViewData["ReturnUrl"] as string;
 }
 
-<h1>Login</h1>
+<div class="row justify-content-center mt-5">
+    @* Centra el contenido en la página *!*@
+    <div class="col-md-6 col-lg-5">
+        @* Limita el ancho del formulario en pantallas medianas y grandes *!*@
+        <div class="card shadow-lg border-0 rounded-lg mt-5">
+            @* Tarjeta con sombra, sin borde y esquinas redondeadas *!*@
+            <div class="card-header bg-primary text-white text-center py-4">
+                @* Cabecera de la tarjeta *!*@
+                <h1 class="h3 mb-0 fw-bold">
+                    <i class="bi bi-box-arrow-in-right me-2"></i> @ViewData["Title"]
+                </h1>
+            </div>
+            <div class="card-body p-4">
+                @* Cuerpo de la tarjeta con padding *!*@
+                <section>
+                    <h4 class="text-center text-muted mb-4">
+                        Inicia sesión con tu cuenta externa
+                    </h4>
+                    <hr class="mb-4" /> @* Línea divisoria con margen inferior *!*@
 
-<div class="row">
-	<div class="col-md-4">
-		<section>
-			<h4>Usa una cuenta externa para iniciar sesion</h4>
-			<hr />
-			<form id="external-account" asp-controller="Account" asp-action="ExternalLogin" asp-route-return="@returnUrl" method="post" class="form-horizontal">
-				<div class="form-group">
-					<p>
-						<button type="submit" class="btn btn-primary" name="provider" value="Google" title="Log in using you Google account">
-							Login con Google
-						</button>
-					</p>
-				</div>
-			</form>
-		</section>
-	</div>
+                    <form id="external-account" asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@returnUrl" method="post">
+                        <div class="d-grid gap-3">
+                            @* Utiliza d-grid y gap para un botón de ancho completo y espaciado *!*@
+                            <button type="submit" class="btn btn-google btn-lg" name="provider" value="Google" title="Iniciar sesión con tu cuenta de Google">
+                                <i class="bi bi-google me-2"></i> Iniciar Sesión con Google
+                            </button>
+                            @* Puedes añadir más proveedores de inicio de sesión aquí si los configuras *!*@
+                            @* <button type="submit" class="btn btn-github btn-lg" name="provider" value="GitHub" title="Iniciar sesión con tu cuenta de GitHub">
+                                <i class="bi bi-github me-2"></i> Iniciar Sesión con GitHub
+                            </button> *@
+                        </div>
+                    </form>
+                </section>
+            </div>
+            @* Puedes añadir un card-footer si necesitas más enlaces o texto en la parte inferior *!*@
+            @* <div class="card-footer text-center py-3">
+                <div class="small"><a href="#">¿Olvidaste tu contraseña?</a></div>
+            </div> *@
+        </div>
+    </div>
 </div>
 
 @section Scripts {
-	<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
+    <style>
+        /* Estilo personalizado para el botón de Google si no lo tienes ya en site.css */
+        .btn-google {
+            color: #fff;
+            background-color: #ea4335; /* Color de Google */
+            border-color: #ea4335;
+        }
+
+            .btn-google:hover {
+                color: #fff;
+                background-color: #d13a2d;
+                border-color: #c9352a;
+            }
+
+        /* Puedes añadir estilos para otros botones como GitHub si los usas */
+        .btn-github {
+            color: #fff;
+            background-color: #333;
+            border-color: #333;
+        }
+
+            .btn-github:hover {
+                color: #fff;
+                background-color: #555;
+                border-color: #555;
+            }
+    </style>
 }

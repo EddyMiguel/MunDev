@@ -1,53 +1,79 @@
 ﻿@model IEnumerable<MunDev.Models.Repositorio>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Gestión de Repositorios";
 }
 
-<h1>Index</h1>
+<h1 class="display-4 mb-4 text-primary">
+    <i class="bi bi-github"></i> @ViewData["Title"]
+</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
+<p class="mb-4">
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Añadir Nuevo Repositorio
+    </a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreRepositorio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RepositorioUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaCreacion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Proyecto)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreRepositorio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RepositorioUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaCreacion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Proyecto.ProyectoId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RepositorioId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RepositorioId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RepositorioId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Listado de Repositorios</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead class="bg-light">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NombreRepositorio)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RepositorioUrl)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaCreacion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Proyecto) @* Ahora mostrará el nombre del proyecto *!*@
+                        </th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NombreRepositorio)
+                            </td>
+                            <td>
+                                <a href="@item.RepositorioUrl" target="_blank" rel="noopener noreferrer">
+                                    @Html.DisplayFor(modelItem => item.RepositorioUrl)
+                                    <i class="bi bi-box-arrow-up-right ms-1"></i> @* Icono de enlace externo *!*@
+                                </a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaCreacion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Proyecto.NombreProyecto) @* Muestra el nombre del proyecto *!*@
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group" aria-label="Acciones de Repositorio">
+                                    <a asp-action="Edit" asp-route-id="@item.RepositorioId" class="btn btn-sm btn-warning" title="Editar">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a asp-action="Details" asp-route-id="@item.RepositorioId" class="btn btn-sm btn-info" title="Ver Detalles">
+                                        <i class="bi bi-info-circle"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.RepositorioId" class="btn btn-sm btn-danger" title="Eliminar">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

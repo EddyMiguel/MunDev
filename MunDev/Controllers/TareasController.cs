@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using MunDev.Models;
 
 namespace MunDev.Controllers
 {
+    [Authorize]
     public class TareasController : Controller
     {
         private readonly MunDevContext _context;
@@ -22,7 +24,10 @@ namespace MunDev.Controllers
         // GET: Tareas
         public async Task<IActionResult> Index()
         {
-            var munDevContext = _context.Tareas.Include(t => t.AsignadoAusuario).Include(t => t.Proyecto);
+            // Incluir las propiedades de navegación para mostrar los nombres en la tabla
+            var munDevContext = _context.Tareas
+                .Include(t => t.AsignadoAusuario) // Para mostrar el nombre del usuario asignado
+                .Include(t => t.Proyecto);         // Para mostrar el nombre del proyecto
             return View(await munDevContext.ToListAsync());
         }
 
@@ -35,8 +40,8 @@ namespace MunDev.Controllers
             }
 
             var tarea = await _context.Tareas
-                .Include(t => t.AsignadoAusuario)
-                .Include(t => t.Proyecto)
+                .Include(t => t.AsignadoAusuario) // Incluir AsignadoAusuario
+                .Include(t => t.Proyecto)         // Incluir Proyecto
                 .FirstOrDefaultAsync(m => m.TareaId == id);
             if (tarea == null)
             {
@@ -49,14 +54,18 @@ namespace MunDev.Controllers
         // GET: Tareas/Create
         public IActionResult Create()
         {
-            ViewData["AsignadoAusuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "UsuarioId");
-            ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "ProyectoId");
+            // CAMBIO AQUÍ: Usar "NombreUsuario" y "NombreProyecto" para el texto de los SelectList
+            ViewData["AsignadoAusuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "NombreUsuario"); // Asumo NombreUsuario
+            ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "NombreProyecto");     // Asumo NombreProyecto
+
+            // Opciones fijas para EstadoTarea y Prioridad
+            ViewBag.EstadoTareaOptions = new SelectList(new List<string> { "Pendiente", "En Progreso", "Completada", "Bloqueada" });
+            ViewBag.PrioridadOptions = new SelectList(new List<string> { "Baja", "Media", "Alta", "Crítica" });
+
             return View();
         }
 
         // POST: Tareas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TareaId,ProyectoId,Titulo,Descripcion,FechaVencimiento,EstadoTarea,Prioridad,AsignadoAusuarioId")] Tarea tarea)
@@ -67,8 +76,11 @@ namespace MunDev.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AsignadoAusuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "UsuarioId", tarea.AsignadoAusuarioId);
-            ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "ProyectoId", tarea.ProyectoId);
+            // CAMBIO AQUÍ: Recargar SelectList con nombres si la validación falla
+            ViewData["AsignadoAusuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "NombreUsuario", tarea.AsignadoAusuarioId);
+            ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "NombreProyecto", tarea.ProyectoId);
+            ViewBag.EstadoTareaOptions = new SelectList(new List<string> { "Pendiente", "En Progreso", "Completada", "Bloqueada" }, tarea.EstadoTarea);
+            ViewBag.PrioridadOptions = new SelectList(new List<string> { "Baja", "Media", "Alta", "Crítica" }, tarea.Prioridad);
             return View(tarea);
         }
 
@@ -85,14 +97,15 @@ namespace MunDev.Controllers
             {
                 return NotFound();
             }
-            ViewData["AsignadoAusuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "UsuarioId", tarea.AsignadoAusuarioId);
-            ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "ProyectoId", tarea.ProyectoId);
+            // CAMBIO AQUÍ: Cargar SelectList con nombres
+            ViewData["AsignadoAusuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "NombreUsuario", tarea.AsignadoAusuarioId);
+            ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "NombreProyecto", tarea.ProyectoId);
+            ViewBag.EstadoTareaOptions = new SelectList(new List<string> { "Pendiente", "En Progreso", "Completada", "Bloqueada" }, tarea.EstadoTarea);
+            ViewBag.PrioridadOptions = new SelectList(new List<string> { "Baja", "Media", "Alta", "Crítica" }, tarea.Prioridad);
             return View(tarea);
         }
 
         // POST: Tareas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TareaId,ProyectoId,Titulo,Descripcion,FechaVencimiento,EstadoTarea,Prioridad,AsignadoAusuarioId")] Tarea tarea)
@@ -122,8 +135,11 @@ namespace MunDev.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AsignadoAusuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "UsuarioId", tarea.AsignadoAusuarioId);
-            ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "ProyectoId", tarea.ProyectoId);
+            // CAMBIO AQUÍ: Recargar SelectList con nombres si la validación falla
+            ViewData["AsignadoAusuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "NombreUsuario", tarea.AsignadoAusuarioId);
+            ViewData["ProyectoId"] = new SelectList(_context.Proyectos, "ProyectoId", "NombreProyecto", tarea.ProyectoId);
+            ViewBag.EstadoTareaOptions = new SelectList(new List<string> { "Pendiente", "En Progreso", "Completada", "Bloqueada" }, tarea.EstadoTarea);
+            ViewBag.PrioridadOptions = new SelectList(new List<string> { "Baja", "Media", "Alta", "Crítica" }, tarea.Prioridad);
             return View(tarea);
         }
 

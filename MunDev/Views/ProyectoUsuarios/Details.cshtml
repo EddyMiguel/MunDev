@@ -1,42 +1,52 @@
 ﻿@model MunDev.Models.ProyectoUsuario
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Eliminar Asignación";
 }
 
-<h1>Details</h1>
+<h1 class="display-4 mb-4 text-danger">
+    <i class="bi bi-trash"></i> @ViewData["Title"]
+</h1>
 
-<div>
-    <h4>ProyectoUsuario</h4>
-    <hr />
+<h3 class="mb-3">¿Estás seguro de que quieres eliminar esta asignación?</h3>
+<p class="text-danger">¡Esta acción es irreversible y desvinculará al usuario del proyecto!</p>
+<hr />
+
+<div class="card shadow-sm p-4 border-danger">
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.RolEnProyecto)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.RolEnProyecto)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.FechaAsignacion)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.FechaAsignacion)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Proyecto)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Proyecto.ProyectoId)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Proyecto.NombreProyecto)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Usuario)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Usuario.UsuarioId)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Usuario.NombreUsuario) @* O .Email *!*@
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.ProyectoUsuarioId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ProyectoUsuarioId" />
+        <button type="submit" value="Delete" class="btn btn-danger">
+            <i class="bi bi-trash-fill"></i> Confirmar Eliminación
+        </button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">
+            <i class="bi bi-arrow-left"></i> Cancelar y Volver a la Lista
+        </a>
+    </form>
 </div>

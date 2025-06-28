@@ -1,0 +1,96 @@
+﻿@model MunDev.Models.Perfil
+@using System.Security.Claims @* Necesario para usar ClaimTypes *!*@
+
+@{
+    // CORRECTED: Add null check for Model.Usuario before accessing NombreUsuario
+    ViewData["Title"] = $"Perfil de {Model.Usuario?.NombreUsuario ?? "Usuario Desconocido"}";
+}
+
+<h1 class="display-4 mb-4 text-primary">
+    <i class="bi bi-person-circle"></i> @ViewData["Title"]
+</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["InfoMessage"] != null)
+{
+    <div class="alert alert-info" role="alert">@TempData["InfoMessage"]</div>
+}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col-md-3 text-center">
+                @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+                {
+                    <img src="@Model.AvatarUrl" class="img-fluid rounded-circle mb-3" alt="Avatar de @(Model.Usuario?.NombreUsuario ?? "Usuario")" style="width: 150px; height: 150px; object-fit: cover;">
+                }
+                else
+                {
+                    <img src="https://placehold.co/150x150/EEEEEE/333333?text=Sin+Avatar" class="img-fluid rounded-circle mb-3" alt="Sin Avatar" style="width: 150px; height: 150px; object-fit: cover;">
+                }
+                @* CORRECTED: Add null check for Model.Usuario *@
+                <h3 class="mt-2">@(Model.Usuario?.NombreUsuario ?? "Usuario Desconocido")</h3>
+                @* CORRECTED: Add null check for Model.Usuario *@
+                <p class="text-muted">@(Model.Usuario?.Email ?? "Correo Desconocido")</p>
+                @if (!string.IsNullOrEmpty(Model.SitioWeb))
+                {
+                    <a href="@Model.SitioWeb" target="_blank" class="btn btn-sm btn-outline-info">
+                        <i class="bi bi-globe"></i> Sitio Web
+                    </a>
+                }
+            </div>
+            <div class="col-md-9">
+                <dl class="row">
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Bio)</dt>
+                    <dd class="col-sm-9">
+                        @if (!string.IsNullOrEmpty(Model.Bio))
+                        {
+                            @Html.Raw(Model.Bio.Replace("\n", "<br/>")) @* Para respetar saltos de línea *!*@
+                        }
+                        else
+                        {
+                            <span class="text-muted">No se ha proporcionado una biografía.</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.FechaNacimiento)</dt>
+                    <dd class="col-sm-9">
+                        @if (Model.FechaNacimiento.HasValue)
+                        {
+                            @Html.DisplayFor(model => model.FechaNacimiento)
+                        }
+                        else
+                        {
+                            <span class="text-muted">No especificada.</span>
+                        }
+                    </dd>
+
+                    @* Otros campos del perfil si los añades *!*@
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 text-center">
+    @* La condición para mostrar el botón de edición *!*@
+    @* CORRECTED: Add null check for User.Identity before accessing IsAuthenticated *!*@
+    @if (User.Identity != null && User.Identity.IsAuthenticated && Model.UsuarioId == Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value))
+    {
+        <a asp-action="Edit" class="btn btn-warning">
+            <i class="bi bi-pencil-square"></i> Editar Mi Perfil
+        </a>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-2">
+        <i class="bi bi-arrow-left"></i> Volver al Inicio
+    </a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
